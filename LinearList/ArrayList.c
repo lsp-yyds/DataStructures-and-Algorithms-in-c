@@ -5,7 +5,7 @@
 #include "ArrayList.h"
 
 /**
- *
+ * 位序从0开始的顺序表的实现
  * @param arrayLength
  * @return
  */
@@ -15,30 +15,31 @@ ArrayList *getArrayList( int arrayLength ) {
     arrayList->element =
         (ElementType *) malloc( sizeof( ElementType ) * arrayLength );
     arrayList->arrayLength = arrayLength;
-    for ( int i = 0; i < arrayLength; i++ ) {
+
+    for ( int i = 0; i < arrayLength; i++ )
         arrayList->element[ i ] = 0;
-    }
     arrayList->listSize = 0;
+
     return arrayList;
 }
+
 ArrayList *getCopyArrayList( ArrayList *targetArrayList ) {
-    ArrayList *arrayList = (ArrayList *) malloc( sizeof( ArrayList ) );
-    arrayList->element = (ElementType *) malloc( sizeof( ElementType ) *
-                                                 targetArrayList->arrayLength );
-    arrayList->arrayLength = targetArrayList->arrayLength;
-    arrayList->listSize = targetArrayList->listSize;
-    for ( int i = 0; i < targetArrayList->arrayLength; i++ ) {
+    ArrayList *arrayList = getArrayList( targetArrayList->arrayLength );
+
+    for ( int i = 0; i < targetArrayList->listSize; i++ )
         arrayList->element[ i ] = targetArrayList->element[ i ];
-    }
+    arrayList->listSize = targetArrayList->listSize;
+
     return arrayList;
 }
 
 ArrayList *changeLengthArrayList( ArrayList *targetArrayList ) {
     ArrayList *arrayList = getArrayList( targetArrayList->arrayLength * 2 );
-    for ( int i = 0; i < targetArrayList->listSize; i++ ) {
+
+    for ( int i = 0; i < targetArrayList->listSize; i++ )
         arrayList->element[ i ] = targetArrayList->element[ i ];
-    }
     arrayList->listSize = targetArrayList->listSize;
+
     return arrayList;
 }
 
@@ -48,18 +49,13 @@ void insertValueArrayList( ArrayList *arrayList, int position,
     if ( position < 0 || position > arrayList->listSize )
         FatalError( "Illegal index!!!" );
 
-    if ( arrayList->listSize == arrayList->arrayLength ) {
+    if ( arrayList->listSize == arrayList->arrayLength )
         arrayList = changeLengthArrayList( arrayList );
-        for ( int i = arrayList->listSize - 1; i >= position; i-- )
-            arrayList->element[ i + 1 ] = arrayList->element[ i ];
-        arrayList->element[ position ] = value;
-        arrayList->listSize++;
-    } else {
-        for ( int i = arrayList->listSize - 1; i >= position; i-- )
-            arrayList->element[ i + 1 ] = arrayList->element[ i ];
-        arrayList->element[ position ] = value;
-        arrayList->listSize++;
-    }
+
+    for ( int i = arrayList->listSize - 1; i >= position; i-- )
+        arrayList->element[ i + 1 ] = arrayList->element[ i ];
+    arrayList->element[ position ] = value;
+    arrayList->listSize++;
 }
 
 void removeValueArrayList( ArrayList *arrayList, int position ) {
@@ -72,11 +68,10 @@ void removeValueArrayList( ArrayList *arrayList, int position ) {
 }
 
 void pushValueArrayList( ArrayList *arrayList, ElementType value ) {
-    if ( arrayList->listSize == arrayList->arrayLength ) {
+    if ( arrayList->listSize == arrayList->arrayLength )
         arrayList = changeLengthArrayList( arrayList );
-        insertValueArrayList( arrayList, arrayList->listSize, value );
-    } else
-        insertValueArrayList( arrayList, arrayList->listSize, value );
+
+    insertValueArrayList( arrayList, arrayList->listSize, value );
 }
 
 void updateValueArrayList( ArrayList *arrayList, int position,
@@ -89,7 +84,7 @@ void updateValueArrayList( ArrayList *arrayList, int position,
 
 // erase
 void eraseArrayList( ArrayList *arrayList ) {
-    arrayList->listSize == 0;
+    arrayList->listSize = 0;
     free( arrayList );
 }
 
@@ -99,6 +94,7 @@ void swap( ArrayList *arrayList, int position1, int position2 ) {
     arrayList->element[ position1 ] = arrayList->element[ position2 ];
     arrayList->element[ position2 ] = temp;
 }
+
 void switchValuesArrayList( ArrayList *arrayList, int position1,
                             int position2 ) {
     if ( position1 < 0 || position2 < 0 || position1 >= arrayList->listSize ||
@@ -107,6 +103,7 @@ void switchValuesArrayList( ArrayList *arrayList, int position1,
 
     swap( arrayList, position1, position2 );
 }
+
 int reverseArrayList( ArrayList *arrayList ) {
     for ( int i = 0; i < arrayList->listSize / 2; i++ )
         swap( arrayList, i, arrayList->listSize - i - 1 );
@@ -126,12 +123,14 @@ int valueOcurranceArrayList( ArrayList *arrayList, ElementType value ) {
             total++;
     return total;
 }
+
 ElementType positionValueArrayList( ArrayList *arrayList, int position ) {
     if ( position < 0 || position >= arrayList->listSize )
         FatalError( "Illegal index!!!" );
 
     return arrayList->element[ position ];
 }
+
 ArrayList *valuePositionsArrayList( ArrayList *arrayList, ElementType value ) {
     int count = 0;
     int total = valueOcurranceArrayList( arrayList, value );
@@ -144,10 +143,12 @@ ArrayList *valuePositionsArrayList( ArrayList *arrayList, ElementType value ) {
     }
     return resultArray;
 }
+
 void displayValuePositionsArrayList( ArrayList *arrayList, ElementType value ) {
     ArrayList *resultArray = valuePositionsArrayList( arrayList, value );
     displayArrayList( resultArray );
 }
+
 ElementType findMaxArrayList( ArrayList *arrayList ) {
     ElementType maxElement = 0;
     for ( int i = 0; i < arrayList->listSize; i++ ) {
@@ -156,6 +157,7 @@ ElementType findMaxArrayList( ArrayList *arrayList ) {
     }
     return maxElement;
 }
+
 ElementType findMinArrayList( ArrayList *arrayList ) {
     ElementType minElement = 0;
     for ( int i = 0; i < arrayList->listSize; i++ ) {
@@ -169,6 +171,7 @@ ElementType findMinArrayList( ArrayList *arrayList ) {
 int size( ArrayList *arrayList ) {
     return arrayList->listSize;
 }
+
 int empty( ArrayList *arrayList ) {
     return arrayList->listSize == 0;
 }
