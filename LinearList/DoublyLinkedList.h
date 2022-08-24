@@ -32,6 +32,8 @@ DNode advance( DNode P );
 ElementType retrieve( DNode P );
 // 链表长度
 int length( DLinkedList L );
+// 检查结点是否为链表结点
+bool checkNode( DLinkedList L, DNode P );
 
 // 此处默认所有结点的元素值不相同
 // 查找位置结点的前驱结点

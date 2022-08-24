@@ -53,12 +53,20 @@ int length( LinkedList L ) {
     return count;
 }
 
+bool checkNode( LinkedList L, LNode P ) {
+    if ( P == NULL )
+        FatalError( "Illegal node!!!" );
+
+    LNode TmpCell;
+    TmpCell = L->next;
+    while ( TmpCell != NULL && TmpCell != P )
+        TmpCell = TmpCell->next;
+    return TmpCell == P;
+}
+
 LNode findPositionPrevious( LinkedList L, int i ) {
     if ( i < 1 || i > length( L ) )
         FatalError( "Illegal index!!!" );
-
-    if ( i == 1 )
-        return L;
 
     LNode P;
     int count;
@@ -89,14 +97,14 @@ LNode findNodePrevious( LinkedList L, LNode P ) {
     if ( P == NULL )
         FatalError( "Illegal node!!!" );
 
-    LNode Tmp;
-    Tmp = L;
-    while ( Tmp->next != NULL && Tmp->next != P )
-        Tmp = Tmp->next;
-    if ( Tmp->next == NULL )
+    LNode TmpCell;
+    TmpCell = L;
+    while ( TmpCell->next != NULL && TmpCell->next != P )
+        TmpCell = TmpCell->next;
+    if ( TmpCell->next == NULL )
         FatalError( "LinkedList don't have this node" );
 
-    return Tmp;
+    return TmpCell;
 }
 
 LNode findPosition( LinkedList L, int i ) {
@@ -146,13 +154,14 @@ int findNodePosition( LinkedList L, LNode P ) {
         TmpCell = TmpCell->next;
         count++;
     }
+    if ( TmpCell == NULL )
+        FatalError( "CircularLinkedList don't have this node!!!" );
 
     return count;
 }
 
 void updateNode( LinkedList L, LNode P, ElementType value ) {
-    if ( P == NULL )
-        FatalError( "Illegal node" );
+    checkNode( L, P );
     P->element = value;
 }
 
@@ -302,8 +311,9 @@ int main() {
         tailInsert( L, i );
         scanf( "%d", &i );
     }
-    deleteValue( L, 5 );
     printList( L );
-    deletePosition( L, 5 );
+    LNode S;
+    S->element = 10;
+    printf( "%d\n", findNodePrevious( L, S )->element );
     printList( L );
 }

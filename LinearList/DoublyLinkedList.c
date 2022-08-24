@@ -59,6 +59,18 @@ int length( DLinkedList L ) {
     return count;
 }
 
+bool checkNode( DLinkedList L, DNode P ) {
+    if ( P == NULL )
+        FatalError( "Illegal node!!!" );
+
+    DNode TmpCell;
+    TmpCell = L->next;
+    if ( TmpCell != NULL && TmpCell != P )
+        TmpCell = TmpCell->next;
+
+    return TmpCell == P;
+}
+
 DNode findPositionPrevious( DLinkedList L, int i ) {
     return findPosition( L, i )->prior;
 }
@@ -128,13 +140,15 @@ int findNodePosition( DLinkedList L, DNode P ) {
         TmpCell = TmpCell->next;
         count++;
     }
+    if ( TmpCell == NULL )
+        FatalError( "CircularLinkedList don't have this node!!!" );
 
     return count;
 }
 
 void updateNode( DLinkedList L, DNode P, ElementType value ) {
-    if ( P == NULL )
-        FatalError( "Illegal pointer" );
+    // 对性能有一定的影响
+    checkNode( L, P );
     P->element = value;
 }
 
