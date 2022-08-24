@@ -8,11 +8,9 @@
 #include <stdlib.h>
 
 LinkedList makeEmpty( LinkedList L ) {
-    if ( L != NULL )
-        deleteList( L );
     L = malloc( sizeof( struct Node ) );
     if ( L == NULL )
-        FatalError( "Out of space" );
+        FatalError( "Out of space!!!" );
     L->next = NULL;
     return L;
 }
@@ -21,45 +19,29 @@ bool isEmpty( LinkedList L ) {
     return L->next == NULL;
 }
 
-bool isLast( LinkedList L, Position P ) {
+bool isLast( LinkedList L, LNode P ) {
     return P->next == NULL;
 }
 
-Position header( LinkedList L ) {
+LNode header( LinkedList L ) {
     return L;
 }
 
-Position first( LinkedList L ) {
+LNode first( LinkedList L ) {
     return L->next;
 }
 
-Position advance( Position P ) {
+LNode advance( LNode P ) {
     return P->next;
 }
 
-int position( LinkedList L, Position P ) {
-    if ( P == NULL )
-        FatalError( "Invalid node!!!" );
-
-    Position TmpCell;
-    int count = 0;
-
-    TmpCell = L;
-    while ( TmpCell != NULL && TmpCell != P ) {
-        TmpCell = TmpCell->next;
-        count++;
-    }
-
-    return count;
-}
-
-ElementType retrieve( Position P ) {
+ElementType retrieve( LNode P ) {
     return P->element;
 }
 
 int length( LinkedList L ) {
     int count;
-    Position P;
+    LNode P;
 
     count = 0;
     P = L->next;
@@ -71,11 +53,14 @@ int length( LinkedList L ) {
     return count;
 }
 
-Position findPrevious( LinkedList L, int i ) {
+LNode findPositionPrevious( LinkedList L, int i ) {
     if ( i < 1 || i > length( L ) )
         FatalError( "Illegal index!!!" );
 
-    Position P;
+    if ( i == 1 )
+        return L;
+
+    LNode P;
     int count;
     P = L;
     count = 0;
@@ -87,33 +72,37 @@ Position findPrevious( LinkedList L, int i ) {
     return P;
 }
 
-Position findValuePrevious( LinkedList L, ElementType value ) {
-    Position P;
+LNode findValuePrevious( LinkedList L, ElementType value ) {
+    LNode P;
 
     P = L;
     while ( P->next != NULL && P->next->element != value )
         P = P->next;
 
+    if ( P->next == NULL )
+        FatalError( "LinkedList don't have this value!!!" );
+
     return P;
 }
 
-Position findPositionPrevious( LinkedList L, Position P ) {
-    Position Tmp;
+LNode findNodePrevious( LinkedList L, LNode P ) {
+    if ( P == NULL )
+        FatalError( "Illegal node!!!" );
 
+    LNode Tmp;
     Tmp = L;
     while ( Tmp->next != NULL && Tmp->next != P )
         Tmp = Tmp->next;
+    if ( Tmp->next == NULL )
+        FatalError( "LinkedList don't have this node" );
 
     return Tmp;
 }
 
-Position find( LinkedList L, int i ) {
-    if ( i < 1 || i > length( L ) )
-        FatalError( "Illegal index!!!" );
+LNode findPosition( LinkedList L, int i ) {
+    return findPositionPrevious( L, i )->next;
 
-    return findPrevious( L, i )->next;
-
-    //    Position P;
+    //    LNode P;
     //    int count;
     //    P = L;
     //    count = 0;
@@ -125,9 +114,7 @@ Position find( LinkedList L, int i ) {
     //    return P;
 }
 
-Position findValue( LinkedList L, ElementType value ) {
-    Position P;
-
+LNode findValue( LinkedList L, ElementType value ) {
     return findValuePrevious( L, value )->next;
 
     //    P = L->next;
@@ -137,8 +124,48 @@ Position findValue( LinkedList L, ElementType value ) {
     //    return P;
 }
 
+LNode findLastNode( LinkedList L ) {
+    LNode P;
+    P = L;
+    while ( !isLast( L, P ) )
+        P = P->next;
+
+    return P;
+}
+
+int findNodePosition( LinkedList L, LNode P ) {
+    if ( P == NULL )
+        FatalError( "Invalid node!!!" );
+
+    LNode TmpCell;
+    int count;
+
+    TmpCell = L;
+    count = 0;
+    while ( TmpCell != NULL && TmpCell != P ) {
+        TmpCell = TmpCell->next;
+        count++;
+    }
+
+    return count;
+}
+
+void updateNode( LinkedList L, LNode P, ElementType value ) {
+    if ( P == NULL )
+        FatalError( "Illegal node" );
+    P->element = value;
+}
+
+void updateValue( LinkedList L, ElementType targetValue, ElementType value ) {
+    updateNode( L, findValue( L, targetValue ), value );
+}
+
+void updatePosition( LinkedList L, int i, ElementType value ) {
+    updateNode( L, findPosition( L, i ), value );
+}
+
 void headInsert( LinkedList L, ElementType value ) {
-    Position TmpCell;
+    LNode TmpCell;
 
     TmpCell = malloc( sizeof( struct Node ) );
     TmpCell->element = value;
@@ -148,37 +175,23 @@ void headInsert( LinkedList L, ElementType value ) {
 
 // TODO 需要性能改进
 void tailInsert( LinkedList L, ElementType value ) {
-    Position P, TmpCell;
+    LNode P, TmpCell;
 
-    P = L;
     TmpCell = malloc( sizeof( struct Node ) );
+    P = findLastNode( L );
     TmpCell->element = value;
-    while ( !isLast( L, P ) )
-        P = P->next;
     TmpCell->next = P->next;
     P->next = TmpCell;
 }
 
-// 结点前插操作有两种实现方法,一是通过实现的查找前结点和结点后插操作,二是通过结点后插交换结点元素值
-void insertPrior( LinkedList L, int i, ElementType value ) {
-    if ( i < 1 || i > length( L ) )
-        FatalError( "Illegal index!!!" );
+void insertNodePrevious( LinkedList L, LNode P, ElementType value ) {
+    if ( P == NULL )
+        FatalError( "Illegal node!!!" );
 
-    Position P;
-    P = find( L, i );
-    insertPriorPosition( L, P, value );
+    if ( P == L )
+        FatalError( "Can't insert before the head node!!!" );
 
-    //    Position P, TmpCell;
-    //    P = find( L, i );
-    //    TmpCell = malloc( sizeof( struct Node ) );
-    //    TmpCell->element = P->element;
-    //    P->element = value;
-    //    TmpCell->next = P->next;
-    //    P->next = TmpCell;
-}
-
-void insertPriorPosition( LinkedList L, Position P, ElementType value ) {
-    Position TmpCell;
+    LNode TmpCell;
     TmpCell = malloc( sizeof( struct Node ) );
     TmpCell->element = P->element;
     P->element = value;
@@ -186,18 +199,25 @@ void insertPriorPosition( LinkedList L, Position P, ElementType value ) {
     P->next = TmpCell;
 }
 
-void insertNext( LinkedList L, int i, ElementType value ) {
-    if ( i < 1 || i > length( L ) )
-        FatalError( "Illegal index!!!" );
+// 结点前插操作有两种实现方法,一是通过实现的查找前结点和结点后插操作,二是通过结点后插交换结点元素值
+void insertPositionPrevious( LinkedList L, int i, ElementType value ) {
 
-    Position P;
-    P = find( L, i );
-    insertNextPosition( L, P, value );
+    insertNodePrevious( L, findPosition( L, i ), value );
+
+    //    LNode P, TmpCell;
+    //    P = findPosition( L, i );
+    //    TmpCell = malloc( sizeof( struct Node ) );
+    //    TmpCell->element = P->element;
+    //    P->element = value;
+    //    TmpCell->next = P->next;
+    //    P->next = TmpCell;
 }
 
-void insertNextPosition( LinkedList L, Position P, ElementType value ) {
-    Position TmpCell;
+void insertNodeFollowing( LinkedList L, LNode P, ElementType value ) {
+    if ( P == NULL )
+        FatalError( "Illegal node!!!" );
 
+    LNode TmpCell;
     TmpCell = malloc( sizeof( struct Node ) );
     if ( TmpCell == NULL )
         FatalError( "Out of space!!!" );
@@ -207,39 +227,49 @@ void insertNextPosition( LinkedList L, Position P, ElementType value ) {
     P->next = TmpCell;
 }
 
-void deletePosition( LinkedList L, Position P ) {
-    Position TmpCell;
+void insertPositionFollowing( LinkedList L, int i, ElementType value ) {
+    insertNodeFollowing( L, findPosition( L, i ), value );
+}
 
-    if ( P->next != NULL ) {
-        TmpCell = P->next;
-        P->element = TmpCell->element;
-        P->next = TmpCell->next;
-        free( TmpCell );
-    } else {
-        TmpCell = findPositionPrevious( L, P );
-        TmpCell->next = P->next;
-        free( P );
-    }
+void deleteNode( LinkedList L, LNode P ) {
+    if ( P == L )
+        FatalError( "Please use deleteList function to delete list!!!" );
+
+    LNode TmpCell;
+    TmpCell = findNodePrevious( L, P );
+    TmpCell->next = P->next;
+    free( P );
+
+    //    if ( P->next != NULL ) {
+    //        TmpCell = P->next;
+    //        P->element = TmpCell->element;
+    //        P->next = TmpCell->next;
+    //        free( TmpCell );
+    //    } else {
+    //        TmpCell = findNodePrevious( L, P );
+    //        TmpCell->next = P->next;
+    //        free( P );
+    //    }
 }
 
 void deleteValue( LinkedList L, ElementType value ) {
-    Position P, TmpCell;
+    deleteNode( L, findValue( L, value ) );
 
-    P = findValuePrevious( L, value );
-
-    if ( !isLast( L, P ) ) {
-        TmpCell = P->next;
-        P->next = TmpCell->next;
-        free( TmpCell );
-    }
+    //    P = findValuePrevious( L, value );
+    //
+    //    if ( !isLast( L, P ) ) {
+    //        TmpCell = P->next;
+    //        P->next = TmpCell->next;
+    //        free( TmpCell );
+    //    }
 }
 
-void delete ( LinkedList L, int i ) {
-    deletePosition( L, find( L, i ) );
+void deletePosition( LinkedList L, int i ) {
+    deleteNode( L, findPosition( L, i ) );
 }
 
 void deleteList( LinkedList L ) {
-    Position P, Tmp;
+    LNode P, Tmp;
 
     P = L->next;
     L->next = NULL;
@@ -251,23 +281,29 @@ void deleteList( LinkedList L ) {
 }
 
 void printList( LinkedList L ) {
-    Position P;
+    LNode P;
 
     P = L->next;
+    printf( "head->" );
     while ( P != NULL ) {
-        printf( "%d", P->element );
+        printf( "%d->", P->element );
         P = P->next;
     }
+    printf( "NULL" );
     printf( "\n" );
 }
 
 int main() {
     LinkedList L;
     L = makeEmpty( L );
-    for ( int i = 0; i < 5; ++i ) {
+    int i;
+    scanf( "%d", &i );
+    while ( i != 9999 ) {
         tailInsert( L, i );
+        scanf( "%d", &i );
     }
+    deleteValue( L, 5 );
     printList( L );
-    delete ( L, position( L, findValue( L, 5 ) ) );
+    deletePosition( L, 5 );
     printList( L );
 }
