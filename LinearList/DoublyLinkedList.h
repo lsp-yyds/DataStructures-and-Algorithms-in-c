@@ -8,10 +8,7 @@
 #include <stdbool.h>
 
 typedef int ElementType;
-struct Node {
-    ElementType element;
-    struct Node *next, *prior;
-};
+struct Node;
 typedef struct Node *PtrToNode;
 typedef PtrToNode DLinkedList;
 typedef PtrToNode DNode;

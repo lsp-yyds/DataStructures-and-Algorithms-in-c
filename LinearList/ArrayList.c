@@ -10,6 +10,12 @@
  * @return
  */
 
+struct ArrayList {
+    ElementType *element;
+    int listSize;
+    int arrayLength;
+};
+
 ArrayList *getArrayList( int arrayLength ) {
     ArrayList *arrayList = (ArrayList *) malloc( sizeof( ArrayList ) );
     arrayList->element =

@@ -8,11 +8,8 @@
 #include "../Fatal.h"
 
 typedef int ElementType;
-typedef struct ArrayList {
-    ElementType *element;
-    int listSize;
-    int arrayLength;
-} ArrayList;
+struct ArrayList;
+typedef struct ArrayList ArrayList;
 
 ArrayList *getArrayList( int arrayLength );
 ArrayList *getCopyArrayList( ArrayList *targetArrayList );

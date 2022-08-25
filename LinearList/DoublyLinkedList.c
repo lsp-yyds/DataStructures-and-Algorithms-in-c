@@ -5,6 +5,11 @@
 #include "../Fatal.h"
 #include <stdlib.h>
 
+struct Node {
+    ElementType element;
+    struct Node *next, *prior;
+};
+
 DLinkedList makeEmpty( DLinkedList L ) {
     // 可能出现无法访问地址的问题
     // if ( L != NULL )

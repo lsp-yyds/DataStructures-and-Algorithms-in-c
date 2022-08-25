@@ -11,6 +11,12 @@
  * @return
  */
 
+struct SeqList {
+    ElementType *element;
+    int listSize;
+    int arrayLength;
+};
+
 SeqList *getSeqList( int arrayLength ) {
     SeqList *seqList = (SeqList *) malloc( sizeof( SeqList ) );
     seqList->element =

@@ -6,6 +6,11 @@
 #include "../Fatal.h"
 #include <stdio.h>
 
+struct Node {
+    ElementType element;
+    struct Node *next;
+};
+
 CLinkedList makeEmpty( CLinkedList L ) {
     L = malloc( sizeof( struct Node ) );
     if ( L == NULL )

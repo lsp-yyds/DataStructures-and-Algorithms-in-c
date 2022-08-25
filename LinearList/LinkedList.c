@@ -7,6 +7,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+struct Node {
+    ElementType element;
+    struct Node *next;
+};
+
 LinkedList makeEmpty( LinkedList L ) {
     L = malloc( sizeof( struct Node ) );
     if ( L == NULL )

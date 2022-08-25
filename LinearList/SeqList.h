@@ -8,11 +8,8 @@
 #include "../Fatal.h"
 
 typedef int ElementType;
-typedef struct SeqList {
-    ElementType *element;
-    int listSize;
-    int arrayLength;
-} SeqList;
+struct SeqList;
+typedef struct SeqList SeqList;
 
 SeqList *getSeqList( int arrayLength );
 SeqList *getCopySeqList( SeqList *targetSeqList );
