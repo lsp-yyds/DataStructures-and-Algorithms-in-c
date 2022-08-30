@@ -5,4 +5,24 @@
 #ifndef DATASTRUCTURES_AND_ALGORITHMS_IN_C_QUEUEINLINKEDLIST_H
 #define DATASTRUCTURES_AND_ALGORITHMS_IN_C_QUEUEINLINKEDLIST_H
 
+#include <stdbool.h>
+
+struct Node;
+struct Queue;
+typedef struct Node *Node;
+typedef struct Queue *Queue;
+typedef int ElementType;
+
+bool isEmpty( Queue Q );
+bool isFull( Queue Q );
+Queue createQueue();
+void disposeQueue( Queue Q );
+void makeEmpty( Queue Q );
+void Enqueue( Queue Q, ElementType value );
+ElementType front( Queue Q );
+void Dequeue( Queue Q );
+ElementType frontAndDequeue( Queue Q );
+void printQueue( Queue Q );
+int length( Queue Q );
+
 #endif // DATASTRUCTURES_AND_ALGORITHMS_IN_C_QUEUEINLINKEDLIST_H
