@@ -13,7 +13,7 @@
 struct StackRecord {
     int capacity;
     int topOfStack;
-    char *element;
+    int *element;
 };
 
 bool IsEmpty( Stack S ) {
