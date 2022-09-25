@@ -2,7 +2,7 @@
 // Created by bruce on 8/28/22.
 //
 
-#include "SearchTree.h"
+#include "BinarySearchTree.h"
 #include "../Fatal.h"
 #include <stdlib.h>
 
@@ -21,6 +21,7 @@ SearchTree makeEmpty( SearchTree T ) {
 }
 
 Position find( SearchTree T, ElementType value ) {
+    // 递归(空间复杂度为O(h))
     if ( T == NULL )
         return NULL;
     if ( value < T->element )
@@ -29,6 +30,15 @@ Position find( SearchTree T, ElementType value ) {
         return find( T->right, value );
     else
         return T;
+
+    // 非递归(空间复杂度为O(1))
+    //    while ( T != NULL && value != T->element ) {
+    //        if ( value < T->element )
+    //            T = T->left;
+    //        else
+    //            T = T->right;
+    //    }
+    //    return T;
 }
 
 Position findMin( SearchTree T ) {
@@ -67,8 +77,29 @@ SearchTree insert( SearchTree T, ElementType value ) {
 }
 
 SearchTree delete ( SearchTree T, ElementType value ) {
+    Position TmpCell;
+
     if ( T == NULL )
         Error( "Element is not found!!!" );
+    else if ( value < T->element )
+        T->left = delete ( T->left, value );
+    else if ( value > T->element )
+        T->right = delete ( T->right, value );
+    else if ( T->left && T->right ) {
+        TmpCell = findMin( T->right );
+        // TmpCell = findMax( T->left );
+        T->element = TmpCell->element;
+        T->right = delete ( T->right, T->element );
+    } else {
+        TmpCell = T;
+        if ( T->left == NULL )
+            T = T->right;
+        else if ( T->right == NULL )
+            T = T->left;
+        free( TmpCell );
+    }
+
+    return T;
 }
 
 ElementType retrieve( Position P );

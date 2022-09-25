@@ -11,9 +11,9 @@ typedef int ElementType;
 
 Matrix createMatrix( int theRows, int theColumns );
 void makeEmpty( Matrix M );
-void negative( Matrix M );
-void addition( Matrix M, Matrix targetMatrix );
-void multiplication( Matrix M, Matrix targetMatrix );
+Matrix negative( Matrix targetMatrix );
+Matrix addition( Matrix M_1, Matrix M_2 );
+Matrix multiplication( Matrix M_1, Matrix M_2 );
 void printMatrix( Matrix M );
 
 #endif // DATASTRUCTURES_AND_ALGORITHMS_IN_C_MATRIX_H

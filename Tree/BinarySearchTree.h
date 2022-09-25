@@ -2,8 +2,8 @@
 // Created by bruce on 8/28/22.
 //
 
-#ifndef DATASTRUCTURES_AND_ALGORITHMS_IN_C_SEARCHTREE_H
-#define DATASTRUCTURES_AND_ALGORITHMS_IN_C_SEARCHTREE_H
+#ifndef DATASTRUCTURES_AND_ALGORITHMS_IN_C_BINARYSEARCHTREE_H
+#define DATASTRUCTURES_AND_ALGORITHMS_IN_C_BINARYSEARCHTREE_H
 
 struct TreeNode;
 typedef struct TreeNode *Position;
@@ -18,4 +18,4 @@ SearchTree insert( SearchTree T, ElementType value );
 SearchTree delete ( SearchTree T, ElementType value );
 ElementType retrieve( Position P );
 
-#endif // DATASTRUCTURES_AND_ALGORITHMS_IN_C_SEARCHTREE_H
+#endif // DATASTRUCTURES_AND_ALGORITHMS_IN_C_BINARYSEARCHTREE_H
